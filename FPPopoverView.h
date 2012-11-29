@@ -35,7 +35,8 @@ typedef enum {
     FPPopoverLightGrayTint = 1UL << 1,
     FPPopoverGreenTint = 1UL << 2,
     FPPopoverRedTint = 1UL << 3,
-    FPPopoverDefaultTint = FPPopoverBlackTint
+    FPPopoverDefaultTint = FPPopoverBlackTint,
+    FPPopoverTransparentGrayTint = 1UL << 4
 } FPPopoverTint;
 
 @interface FPPopoverView : UIView

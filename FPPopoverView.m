@@ -9,6 +9,9 @@
 
 #import "FPPopoverView.h"
 
+#define FP_POPOVER_ALPHA 1.f
+#define FP_POPOVER_TRANSPARENT_ALPHA 0.7f
+
 #define FP_POPOVER_ARROW_HEIGHT 18.0
 #define FP_POPOVER_ARROW_BASE 36.0
 #define FP_POPOVER_RADIUS 10.0
@@ -228,29 +231,43 @@
         {
             colors[0] = colors[1] = colors[2] = 0.6;
             colors[4] = colors[5] = colors[6] = 0.1;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
         }
         else
         {
             colors[0] = colors[1] = colors[2] = 0.4;
             colors[4] = colors[5] = colors[6] = 0.1;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
         }        
     }
-    
+    else if(self.tint == FPPopoverTransparentGrayTint)
+    {
+       if(_arrowDirection == FPPopoverArrowDirectionUp)
+       {
+          colors[0] = colors[1] = colors[2] = 0.6;
+          colors[4] = colors[5] = colors[6] = 0.1;
+          colors[3] = colors[7] = FP_POPOVER_TRANSPARENT_ALPHA;
+       }
+       else
+       {
+          colors[0] = colors[1] = colors[2] = 0.4;
+          colors[4] = colors[5] = colors[6] = 0.1;
+          colors[3] = colors[7] = FP_POPOVER_TRANSPARENT_ALPHA;
+       }
+    }
     else if(self.tint == FPPopoverLightGrayTint)
     {
         if(_arrowDirection == FPPopoverArrowDirectionUp)
         {
             colors[0] = colors[1] = colors[2] = 0.8;
             colors[4] = colors[5] = colors[6] = 0.3;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
         }
         else
         {
             colors[0] = colors[1] = colors[2] = 0.6;
             colors[4] = colors[5] = colors[6] = 0.1;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
         }        
     }
     else if(self.tint == FPPopoverRedTint)
@@ -259,14 +276,14 @@
         {
             colors[0] = 0.72; colors[1] = 0.35; colors[2] = 0.32;
             colors[4] = 0.36; colors[5] = 0.0;  colors[6] = 0.09;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
 
         }
         else
         {
             colors[0] = 0.82; colors[1] = 0.45; colors[2] = 0.42;
             colors[4] = 0.36; colors[5] = 0.0;  colors[6] = 0.09;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
         }        
     }
     
@@ -276,14 +293,14 @@
         {
             colors[0] = 0.35; colors[1] = 0.72; colors[2] = 0.17;
             colors[4] = 0.18; colors[5] = 0.30;  colors[6] = 0.03;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
             
         }
         else
         {
             colors[0] = 0.45; colors[1] = 0.82; colors[2] = 0.27;
             colors[4] = 0.18; colors[5] = 0.30;  colors[6] = 0.03;
-            colors[3] = colors[7] = 1.0;
+            colors[3] = colors[7] = FP_POPOVER_ALPHA;
         }        
     }
     
@@ -336,19 +353,23 @@
     //fill the other part of path
     if(self.tint == FPPopoverBlackTint)
     {
-        CGContextSetRGBFillColor(ctx, 0.1, 0.1, 0.1, 1.0);        
+        CGContextSetRGBFillColor(ctx, 0.1, 0.1, 0.1, FP_POPOVER_ALPHA);
+    }
+    else if(self.tint == FPPopoverTransparentGrayTint)
+    {
+       CGContextSetRGBFillColor(ctx, 0.1, 0.1, 0.1, FP_POPOVER_TRANSPARENT_ALPHA);
     }
     else if(self.tint == FPPopoverLightGrayTint)
     {
-        CGContextSetRGBFillColor(ctx, 0.3, 0.3, 0.3, 1.0);        
+        CGContextSetRGBFillColor(ctx, 0.3, 0.3, 0.3, FP_POPOVER_ALPHA);        
     }
     else if(self.tint == FPPopoverRedTint)
     {
-        CGContextSetRGBFillColor(ctx, 0.36, 0.0, 0.09, 1.0);        
+        CGContextSetRGBFillColor(ctx, 0.36, 0.0, 0.09, FP_POPOVER_ALPHA);        
     }
     else if(self.tint == FPPopoverGreenTint)
     {
-        CGContextSetRGBFillColor(ctx, 0.18, 0.30, 0.03, 1.0);        
+        CGContextSetRGBFillColor(ctx, 0.18, 0.30, 0.03, FP_POPOVER_ALPHA);        
     }
 
     
@@ -374,17 +395,18 @@
     CGContextStrokePath(ctx);
     CGPathRelease(externalBorderPath);
 
-    //3D border of the content view
-    CGRect cvRect = _contentView.frame;
-    //firstLine
-    CGContextSetRGBStrokeColor(ctx, 0.7, 0.7, 0.7, 1.0);
-    CGContextStrokeRect(ctx, cvRect);
-    //secondLine
-    cvRect.origin.x -= 1; cvRect.origin.y -= 1; cvRect.size.height += 2; cvRect.size.width += 2;
-    CGContextSetRGBStrokeColor(ctx, 0.4, 0.4, 0.4, 1.0);
-    CGContextStrokeRect(ctx, cvRect);
-    
-    
+   if ( self.tint != FPPopoverTransparentGrayTint)
+   {
+      //3D border of the content view
+      CGRect cvRect = _contentView.frame;
+      //firstLine
+      CGContextSetRGBStrokeColor(ctx, 0.7, 0.7, 0.7, 1.0);
+      CGContextStrokeRect(ctx, cvRect);
+      //secondLine
+      cvRect.origin.x -= 1; cvRect.origin.y -= 1; cvRect.size.height += 2; cvRect.size.width += 2;
+      CGContextSetRGBStrokeColor(ctx, 0.4, 0.4, 0.4, 1.0);
+      CGContextStrokeRect(ctx, cvRect);
+   }
     
     CGContextRestoreGState(ctx);
 }
