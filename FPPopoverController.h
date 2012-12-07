@@ -21,6 +21,10 @@
           shouldDismissVisiblePopover:(FPPopoverController*)visiblePopoverController;
 @end
 
+@protocol FPPopoverControllerContent <NSObject>
+-(void)updateViewForOrientation:(UIInterfaceOrientation) orientation;
+@end
+
 @interface FPPopoverController : UIViewController
 {
     FPTouchView *_touchView;
@@ -34,6 +38,7 @@
     BOOL _shadowsHidden;
     CGColorRef _shadowColor;
 }
+@property (nonatomic, assign) id<FPPopoverControllerContent> contentController;
 @property(nonatomic,assign) id<FPPopoverControllerDelegate> delegate;
 /** @brief FPPopoverArrowDirectionAny, FPPopoverArrowDirectionVertical or FPPopoverArrowDirectionHorizontal for automatic arrow direction.
  **/

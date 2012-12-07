@@ -10,6 +10,7 @@
 #import "FPPopoverController.h"
 
 @interface FPPopoverController(Private)
+
 -(CGPoint)originFromView:(UIView*)fromView;
 
 
@@ -96,7 +97,7 @@
                                               self.contentSize.width, self.contentSize.height)];
         
         _viewController = [viewController retain];
-        
+               
         [_touchView addSubview:_contentView];
         
         [_contentView addContentView:_viewController.view];
@@ -132,14 +133,21 @@
 
 -(void)setupView
 {
-    self.view.frame = CGRectMake(0, 0, [self parentWidth], [self parentHeight]);
-    _touchView.frame = self.view.bounds;
-    
-    //view position, size and best arrow direction
-    [self bestArrowDirectionAndFrameFromView:_fromView];
-
-    [_contentView setNeedsDisplay];
-    [_touchView setNeedsDisplay];
+   self.view.frame = CGRectMake(0, 0, [self parentWidth], [self parentHeight]);
+   _touchView.frame = self.view.bounds;
+   
+   //view position, size and best arrow direction
+   
+   [self bestArrowDirectionAndFrameFromView:_fromView];
+   
+   if (self.contentController)
+   {
+      UIInterfaceOrientation newOrientation = (UIInterfaceOrientation)[UIDevice currentDevice].orientation;
+      [self.contentController updateViewForOrientation:newOrientation];
+   }
+   
+   [_contentView setNeedsDisplay];
+   [_touchView setNeedsDisplay];
 }
 
 - (void)viewDidLoad
@@ -161,6 +169,10 @@
     return YES;
 }
 
+-(NSUInteger)supportedInterfaceOrientations
+{
+   return UIInterfaceOrientationMaskAll;
+}
 
 #pragma mark presenting
 
@@ -287,7 +299,7 @@
     _deviceOrientation = [UIDevice currentDevice].orientation;
     
     [UIView animateWithDuration:0.2 animations:^{
-        [self setupView]; 
+        [self setupView];
     }];
 }
 
