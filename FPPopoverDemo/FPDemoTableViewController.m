@@ -35,6 +35,12 @@
 
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -55,7 +61,6 @@
     DemoTableController *controller = [[DemoTableController alloc] initWithStyle:UITableViewStylePlain];
     
     FPPopoverController *popover = [[FPPopoverController alloc] initWithViewController:controller];
-    [controller release];
     
     //popover.arrowDirection = FPPopoverArrowDirectionAny;
     popover.tint = FPPopoverDefaultTint;
@@ -67,8 +72,8 @@
     popover.arrowDirection = FPPopoverArrowDirectionRight;
     
     //sender is the UIButton view
-    [popover presentPopoverFromView:sender]; 
-    [popover release];
+    [popover presentPopoverFromView:sender];
+    
 }
 
 
@@ -93,7 +98,6 @@
     if(cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        [cell autorelease];
     }
     
     //accessory view button
@@ -112,8 +116,6 @@
     return YES;
 }
 */
-
-
 
 
 
