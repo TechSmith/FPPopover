@@ -16,7 +16,6 @@
     FPPopoverView *_contentView;
     UIViewController *_viewController;
     UIWindow *_window;
-    UIView *_parentView;
     UIView *_fromView;
     UIDeviceOrientation _deviceOrientation;
     
@@ -58,12 +57,25 @@
 
 -(void)addObservers
 {
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];   
+    
+    [[NSNotificationCenter defaultCenter] 
+     addObserver:self 
+     selector:@selector(deviceOrientationDidChange:) 
+     name:@"UIDeviceOrientationDidChangeNotification" 
+     object:nil]; 
+
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willPresentNewPopover:) name:@"FPNewPopoverPresented" object:nil];
+    
+    _deviceOrientation = [UIDevice currentDevice].orientation;
+    
 }
 
 -(void)removeObservers
 {
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_viewController removeObserver:self forKeyPath:@"title"];
 }
@@ -310,6 +322,7 @@
     }
      _window=nil;
      _parentView=nil;
+    
 }
 
 -(void)dismissPopoverAnimated:(BOOL)animated {
@@ -590,5 +603,8 @@
     _alpha = alpha;
     self.view.alpha = alpha;
 }
+
+
+
 
 @end
